@@ -10,7 +10,6 @@ from requests_oauthlib import OAuth1
 class Twitter:
     ### Private class variable ###
     __bot_name = "@tip_moya4_bot"
-    __bot_command_template = __bot_name + " [command] [twitterアカウントまたはアドレス] [amount]"
     __oauth = OAuth1(
         "",
         "",
@@ -19,6 +18,7 @@ class Twitter:
     )
     # Twitter全体のタイムラインからデータを取得するAPI
     __public_streams_url = "https://stream.twitter.com/1.1/statuses/filter.json"
+    __public_reply_api_url = "https://api.twitter.com/1.1/statuses/update.json"
 
     def __init__(self):
         print("init")
@@ -36,15 +36,17 @@ class Twitter:
             try:
                 tweet = json.loads(line.decode("utf-8"))
 
-
+                tweet_id_str = tweet["id_str"]
                 sender_user_id = tweet["user"]["id"]
                 sender_user_screen_name = tweet["user"]["screen_name"]
 
-                res = tweet["text"].split(" ")
-                if res[0] != self.__bot_name:
-                    raise Exception("コマンド実行の形式を確認してね\n" + self.__bot_command_template)
 
-                cmd = res[1]
+
+                tweet_text_dict = tweet["text"].split(" ")
+                if tweet_text_dict[0] != self.__bot_name:
+                    raise Exception("コマンド実行の形式を確認してね")
+
+                cmd = tweet_text_dict[1]
 
                 # !もやたす
                 if cmd == Command.DEPOSIT.value:
@@ -52,13 +54,15 @@ class Twitter:
                     print(cmd)
                     print(sender_user_id)
                     print(sender_user_screen_name)
+                    a = self.__reply("@" + sender_user_screen_name +"!もやたすコマンドが実行されましたaaavvaa", tweet_id_str)
+                    print(a)
 
                 # !出荷
                 elif cmd == Command.TIP.value:
                     print('------------------------TIPコマンド')
 
-                    receiver_users = self.__get_receiver_users(tweet, res[2][1:])
-                    ammount = res[3]
+                    receiver_users = self.__get_receiver_users(tweet, tweet_text_dict[2][1:])
+                    ammount = tweet_text_dict[3]
 
                     print(cmd)
                     print(receiver_users)
@@ -69,7 +73,7 @@ class Twitter:
                 elif cmd == Command.RAIN.value:
                     print('------------------------RAINコマンド')
 
-                    ammount = res[2]
+                    ammount = tweet_text_dict[2]
 
                     print(cmd)
                     print(ammount)
@@ -91,6 +95,20 @@ class Twitter:
                 }
 
         raise Exception("not match receiver_user")
+
+    def __reply(self, text, tweet_id_str):
+        params = {
+            "status": text,
+            "in_reply_to_status_id": tweet_id_str,
+            "auto_populate_reply_metadata": "true"
+        }
+
+        return requests.post(
+            self.__public_reply_api_url,
+            auth=self.__oauth,
+            data=params,
+        )
+
 
 if __name__ == '__main__':
     twitter = Twitter()
