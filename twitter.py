@@ -40,13 +40,9 @@ class Twitter:
                 sender_user_id = tweet["user"]["id"]
                 sender_user_screen_name = tweet["user"]["screen_name"]
 
+                cmd_dict = self.__parse_command(tweet["text"])
 
-
-                tweet_text_dict = tweet["text"].split(" ")
-                if tweet_text_dict[0] != self.__bot_name:
-                    raise Exception("コマンド実行の形式を確認してね")
-
-                cmd = tweet_text_dict[1]
+                cmd = cmd_dict[1]
 
                 # !もやたす
                 if cmd == Command.DEPOSIT.value:
@@ -61,8 +57,8 @@ class Twitter:
                 elif cmd == Command.TIP.value:
                     print('------------------------TIPコマンド')
 
-                    receiver_users = self.__get_receiver_users(tweet, tweet_text_dict[2][1:])
-                    ammount = tweet_text_dict[3]
+                    receiver_users = self.__get_receiver_users(tweet, cmd_dict[2][1:])
+                    ammount = cmd_dict[3]
 
                     print(cmd)
                     print(receiver_users)
@@ -73,7 +69,7 @@ class Twitter:
                 elif cmd == Command.RAIN.value:
                     print('------------------------RAINコマンド')
 
-                    ammount = tweet_text_dict[2]
+                    ammount = cmd_dict[2]
 
                     print(cmd)
                     print(ammount)
@@ -84,6 +80,14 @@ class Twitter:
 
             except:
                 pass
+
+
+    def __parse_command(self, tweet_text):
+        tweet_text_dict = tweet_text.split(" ")
+        if tweet_text_dict[0] != self.__bot_name:
+            raise Exception("コマンド実行の形式を確認してね")
+
+        return tweet_text_dict
 
 
     def __get_receiver_users(self, tweet, receiver_screen_name):
