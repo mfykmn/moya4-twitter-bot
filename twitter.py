@@ -5,8 +5,8 @@ from requests_oauthlib import OAuth1
 
 class Twitter:
     ### Private class variable ###
-    __bot_name = "tip_moya4_bot"
-    __bot_command_template = "@" + __bot_name + " [command] [twitterアカウントまたはアドレス] [amount]"
+    __bot_name = "@tip_moya4_bot"
+    __bot_command_template = __bot_name + " [command] [twitterアカウントまたはアドレス] [amount]"
     __oauth = OAuth1(
         "",
         "",
@@ -25,7 +25,7 @@ class Twitter:
             self.__public_streams_url,
             auth=self.__oauth,
             stream=True,
-            data={"track": "@" + self.__bot_name}
+            data={"track": self.__bot_name}
         )
 
         for line in r.iter_lines():
@@ -43,8 +43,8 @@ class Twitter:
 
     def __split_command(self, tweet_text):
         res = tweet_text.split(" ")
-        if res[0] != "@" + self.__bot_name:
-            raise Exception("コマンド実行の形式を確認してね")
+        if res[0] != self.__bot_name:
+            raise Exception("コマンド実行の形式を確認してね\n" + self.__bot_command_template)
 
         return {
             "command": res[1],
