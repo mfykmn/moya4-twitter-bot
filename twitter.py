@@ -8,20 +8,19 @@ from commands import Command
 from requests_oauthlib import OAuth1
 
 class Twitter:
-    ### Private class variable ###
-    __bot_name = "@tip_moya4_bot"
-    __oauth = OAuth1(
-        "",
-        "",
-        "",
-        "",
-    )
-    # Twitter全体のタイムラインからデータを取得するAPI
-    __public_streams_url = "https://stream.twitter.com/1.1/statuses/filter.json"
-    __public_reply_api_url = "https://api.twitter.com/1.1/statuses/update.json"
-
     def __init__(self):
-        print("init")
+        self.__bot_name = "@tip_moya4_bot"
+        self.__oauth = OAuth1(
+            "",
+            "",
+            "",
+            "",
+        )
+
+        # Twitter全体のタイムラインからデータを取得するAPI
+        self.__public_streams_url = "https://stream.twitter.com/1.1/statuses/filter.json"
+        # リプライを送るAPI
+        self.__public_reply_api_url = "https://api.twitter.com/1.1/statuses/update.json"
 
     def run_worker(self):
         print("run_worker")
