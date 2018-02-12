@@ -1,6 +1,10 @@
 from enum import Enum
 
 class Command(Enum):
+    REGSTER = "！開園"
+    BALANCE = "!もやたす"
+    DEPOSIT = "!種まき"
+    WITHDRAW = "！収穫"
     TIP = "!出荷"
     RAIN = "!水やり"
-    DEPOSIT = "!もやたす"
+    DONATE = "!寄付"
