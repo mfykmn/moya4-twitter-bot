@@ -23,7 +23,9 @@ if __name__ == '__main__':
     config = toml.load(open(config_path))
 
     t_client = TwitterClient(config["twitter"])
-    m_client = WalletClient(config["wallet"])
+    w_client = WalletClient(config["wallet"])
+
+    print("Worker Run")
 
     timeline = t_client.stream_bot_timeline()
     for line in timeline.iter_lines():
@@ -43,7 +45,7 @@ if __name__ == '__main__':
             # コマンド:@tip_moya4_bot !開園
             if tweet_dict[1] == Command.REGSTER.value:
                 # アドレス生成
-                m_client.register(sender_user_id, sender_user_screen_name)
+                w_client.register(sender_user_id, sender_user_screen_name)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -52,7 +54,7 @@ if __name__ == '__main__':
             # コマンド:@tip_moya4_bot !もやたす
             elif tweet_dict[1] == Command.BALANCE.value:
                 # 保持コインの確認
-                m_client.balance(sender_user_id, sender_user_screen_name)
+                w_client.balance(sender_user_id, sender_user_screen_name)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -63,7 +65,7 @@ if __name__ == '__main__':
                 amount = tweet_dict[2]
 
                 # コインを残高に入金する
-                m_client.deposit(sender_user_id, sender_user_screen_name, amount)
+                w_client.deposit(sender_user_id, sender_user_screen_name, amount)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -74,7 +76,7 @@ if __name__ == '__main__':
                 amount = tweet_dict[2]
 
                 # コインを残高から出金する
-                m_client.withdraw(sender_user_id, sender_user_screen_name, amount)
+                w_client.withdraw(sender_user_id, sender_user_screen_name, amount)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -86,7 +88,7 @@ if __name__ == '__main__':
                 amount = tweet_dict[3]
 
                 # コインをメンション or アドレスに送金する
-                m_client.tip(sender_user_id, sender_user_screen_name, receiver_users, amount)
+                w_client.tip(sender_user_id, sender_user_screen_name, receiver_users, amount)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -97,7 +99,7 @@ if __name__ == '__main__':
                 amount = tweet_dict[2]
 
                 # 全twitterアドレスに対してコインを配布する
-                m_client.rain(sender_user_id, sender_user_screen_name, amount)
+                w_client.rain(sender_user_id, sender_user_screen_name, amount)
 
                 # 結果をリプライ
                 res = t_client.reply(
