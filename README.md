@@ -1,4 +1,4 @@
-#twitter client
+# twitter client
 Require Python 3.6.4
 
 ```bash
@@ -7,8 +7,8 @@ pipenv run python bot.py
 ```
 
 
-#Walletについて
-##コマンド
+# Walletについて
+## コマンド
 ```bash
 cd ~/sprouts/src
 
@@ -19,7 +19,7 @@ cd ~/sprouts/src
 ./sproutsd stop
 ```
 
-##設定ファイル
+## 設定ファイル
 ```bash
 vi ~/.sprouts/sprouts.conf
 
