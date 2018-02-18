@@ -1,9 +1,12 @@
 import json
+import toml
 
 # Internal package
 from twitter_client import TwitterClient
 from wallet_client import WalletClient
 from commands import Command
+
+config_path = './_config/development.toml'
 
 def get_receiver_users(tweet, receiver_screen_name):
     for mention in tweet["entities"]["user_mentions"]:
@@ -17,8 +20,10 @@ def get_receiver_users(tweet, receiver_screen_name):
 
 
 if __name__ == '__main__':
-    t_client = TwitterClient()
-    m_client = WalletClient()
+    config = toml.load(open(config_path))
+
+    t_client = TwitterClient(config["twitter"])
+    m_client = WalletClient(config["wallet"])
 
     timeline = t_client.stream_bot_timeline()
     for line in timeline.iter_lines():

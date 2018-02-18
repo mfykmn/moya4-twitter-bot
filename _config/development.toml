@@ -1,0 +1,13 @@
+[twitter]
+
+[wallet]
+rpchost = "localhost"
+rpcport = "8332"
+rpcuser = "moya4"
+rpcpassword = "moya4pass"
+
+[database]
+host = "localhost"
+ports = [ 8001, 8001, 8002 ]
+connection_max = 5000
+enabled = true
