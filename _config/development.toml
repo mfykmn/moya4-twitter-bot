@@ -1,4 +1,8 @@
 [twitter]
+apikey      = "your_api_key"
+apisecret   = "your_api_secret"
+token        = "your_access_token"
+tokensecret = "your_access_token_secret"
 
 [wallet]
 rpchost = "localhost"

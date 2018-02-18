@@ -4,14 +4,9 @@ import requests
 from requests_oauthlib import OAuth1
 
 class TwitterClient:
-    def __init__(self):
+    def __init__(self, config):
         self.bot_name = "@tip_moya4_bot"
-        self.__oauth = OAuth1(
-            "",
-            "",
-            "",
-            "",
-        )
+        self.__oauth = OAuth1(config["apikey"], config["apisecret"], config["token"], config["tokensecret"])
 
         # Twitter全体のタイムラインからデータを取得するAPI
         self.__public_streams_url = "https://stream.twitter.com/1.1/statuses/filter.json"
