@@ -45,7 +45,7 @@ if __name__ == '__main__':
             # コマンド:@tip_moya4_bot !開園
             if tweet_dict[1] == Command.REGSTER.value:
                 # アドレス生成
-                w_client.register(sender_user_id, sender_user_screen_name)
+                w_client.getnewaddress(sender_user_id, sender_user_screen_name)
 
                 # 結果をリプライ
                 res = t_client.reply(
