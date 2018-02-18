@@ -1,4 +1,4 @@
-class Moya4APIClient:
+class WalletClient:
     def __init__(self):
         print("Moya4APIClient init")
 

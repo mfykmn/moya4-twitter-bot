@@ -2,7 +2,7 @@ import json
 
 # Internal package
 from twitter_client import TwitterClient
-from moya4_api_client import Moya4APIClient
+from wallet_client import WalletClient
 from commands import Command
 
 def get_receiver_users(tweet, receiver_screen_name):
@@ -18,7 +18,7 @@ def get_receiver_users(tweet, receiver_screen_name):
 
 if __name__ == '__main__':
     t_client = TwitterClient()
-    m_client = Moya4APIClient()
+    m_client = WalletClient()
 
     timeline = t_client.stream_bot_timeline()
     for line in timeline.iter_lines():
