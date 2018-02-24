@@ -1,17 +1,17 @@
 [twitter]
-apikey      = "your_api_key"
-apisecret   = "your_api_secret"
-token        = "your_access_token"
-tokensecret = "your_access_token_secret"
+apikey      = ""
+apisecret   = ""
+token       = ""
+tokensecret = ""
 
 [wallet]
-rpchost = "localhost"
-rpcport = "8332"
-rpcuser = "moya4"
+rpchost     = "0.0.0.0"
+rpcport     = "8332"
+rpcuser     = "moya4"
 rpcpassword = "moya4pass"
 
 [database]
-host = "localhost"
-ports = [ 8001, 8001, 8002 ]
-connection_max = 5000
-enabled = true
+host     = "0.0.0.0"
+port     = "5432"
+user     = "docker"
+password = "docker"
