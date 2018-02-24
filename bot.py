@@ -67,13 +67,33 @@ if __name__ == '__main__':
                         "@" + sender_user_screen_name + " エラー発生", tweet_id_str)
 # --- コマンド:@tip_moya4_bot !もやたす
             elif tweet_dict[1] == Command.BALANCE.value:
-                # 保持コインの確認
-                balance = w_client.getbalance(sender_user_id_str)
+                try:
+                    user = d_client.getUser(sender_user_id_str)
+                    print(user)
+                    if user is not None:
+                        # 保持コインの確認
+                        balance = w_client.getbalance(sender_user_id_str)
 
-                # 結果をリプライ
-                res = t_client.reply(
-                    "@" + sender_user_screen_name + " TODO: !もやたす コマンドの結果" + balance, tweet_id_str)
-                print(res)
+                        msg = "@{screen_name}さんの育成状況だよ。栽培がんばろー！\n" \
+                            + "🏦 アドレス：{address}\n" \
+                            + "🛒 出荷待ち：{balance}もやし\n" \
+                            + "🌱 栽培中　： TODOもやし\n" \
+                            + "💧 総水やり量：TODO\n" \
+                            + "👑 水やりランク：TODO位"
+                        formatted_msg = msg.format(
+                            screen_name=sender_user_screen_name,
+                            address="TODO",
+                            balance=str(balance)
+                        )
+
+                        # 結果をリプライ
+                        t_client.reply(formatted_msg, tweet_id_str)
+                    else:
+                        t_client.reply(
+                            "@" + sender_user_screen_name + " アドレスが存在しません。開園を行ってください", tweet_id_str)
+                except:
+                    t_client.reply(
+                        "@" + sender_user_screen_name + " エラー発生", tweet_id_str)
 # --- コマンド:@tip_moya4_bot !種まき [数量]
             elif tweet_dict[1] == Command.DEPOSIT.value:
                 amount = tweet_dict[2]
