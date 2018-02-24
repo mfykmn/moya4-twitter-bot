@@ -34,32 +34,43 @@ if __name__ == '__main__':
         try:
             tweet = json.loads(line.decode("utf-8"))
 
-            tweet_id_str = tweet["id_str"]
-            sender_user_id = tweet["user"]["id"]
+            tweet_id_str = tweet["id_str"] # リプライ時に利用する
+            sender_user_id_str = tweet["user"]["id_str"]
             sender_user_screen_name = tweet["user"]["screen_name"]
             tweet_dict = tweet["text"].split(" ")
 
             # Botへのメンションチェック
             if tweet_dict[0] != t_client.bot_name:
-                raise Exception("コマンド実行の形式を確認してね")
+                t_client.reply(
+                    "@" + sender_user_screen_name + " コマンド実行の形式を確認してね", tweet_id_str)
+                break
 
             print(tweet_dict[1])
             # コマンド:@tip_moya4_bot !開園
             if tweet_dict[1] == Command.REGSTER.value:
-                d_client.getUser(sender_user_id)
-                # TODO: DBチェック
+                try:
+                    user = d_client.getUser(sender_user_id_str)
+                    if user is None:
+                        # アドレス生成
+                        addr = w_client.getnewaddress(sender_user_id_str)
+                        # DB登録
+                        d_client.createUser(sender_user_id_str, addr)
 
-                # アドレス生成
-                w_client.getnewaddress(sender_user_id)
+                        # 結果をリプライ
+                        t_client.reply(
+                            "@" + sender_user_screen_name + " 開園しました！ アドレス: "+addr, tweet_id_str)
+                    else:
+                        t_client.reply(
+                            "@" + sender_user_screen_name + " もう開園済みだよ", tweet_id_str)
+                except:
+                    t_client.reply(
+                        "@" + sender_user_screen_name + " エラー発生", tweet_id_str)
 
-                # 結果をリプライ
-                res = t_client.reply(
-                    "@" + sender_user_screen_name + " TODO: !開園 コマンドの結果", tweet_id_str)
-                print(res)
+
             # コマンド:@tip_moya4_bot !もやたす
             elif tweet_dict[1] == Command.BALANCE.value:
                 # 保持コインの確認
-                balance = w_client.getbalance(sender_user_id)
+                balance = w_client.getbalance(sender_user_id_str)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -70,7 +81,7 @@ if __name__ == '__main__':
                 amount = tweet_dict[2]
 
                 # コインを残高に入金する
-                w_client.deposit(sender_user_id, sender_user_screen_name, amount)
+                w_client.deposit(sender_user_id_str, sender_user_screen_name, amount)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -81,7 +92,7 @@ if __name__ == '__main__':
                 amount = tweet_dict[2]
 
                 # コインを残高から出金する
-                w_client.withdraw(sender_user_id, sender_user_screen_name, amount)
+                w_client.withdraw(sender_user_id_str, sender_user_screen_name, amount)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -93,7 +104,7 @@ if __name__ == '__main__':
                 amount = tweet_dict[3]
 
                 # コインをメンション or アドレスに送金する
-                w_client.tip(sender_user_id, sender_user_screen_name, receiver_users, amount)
+                w_client.tip(sender_user_id_str, sender_user_screen_name, receiver_users, amount)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -104,7 +115,7 @@ if __name__ == '__main__':
                 amount = tweet_dict[2]
 
                 # 全twitterアドレスに対してコインを配布する
-                w_client.rain(sender_user_id, sender_user_screen_name, amount)
+                w_client.rain(sender_user_id_str, sender_user_screen_name, amount)
 
                 # 結果をリプライ
                 res = t_client.reply(
