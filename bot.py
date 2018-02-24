@@ -145,6 +145,21 @@ if __name__ == '__main__':
                 res = t_client.reply(
                     "@" + sender_user_screen_name + " TODO: !水やり コマンドの結果", tweet_id_str)
                 print(res)
+# --- コマンド:@tip_moya4_bot !ヘルプ
+            elif tweet_dict[1] == Command.HELP.value:
+                msg1 = "@" + sender_user_screen_name + " もやしファームの使い方を説明するよ🌱 その1\n\n" \
+                      + "!開園\nもやしファームの開園ができるよ。最初に実施してね。\n\n" \
+                      + "!もやたす\nファームの状況をお知らせするよ。\n\n" \
+                      + "!種まき [数量]\n出荷待ちのもやしを使って、栽培ができるよ"
+
+                msg2 = "@" + sender_user_screen_name + " もやしファームの使い方を説明するよ🌱 その２\n\n" \
+                       + "!収穫 [数量]\n栽培中のもやしを、出荷待ちにするよ。\n\n" \
+                       + "!出荷 [メンション／アドレス] [数量]\n出荷待ちのもやしを、宛先に出荷するよ。\n\n" \
+                       + "!水やり [数量]\n栽培中のもやしで、他のファームに水やりができるよ。"
+
+                # 結果をリプライ
+                t_client.reply(msg1, tweet_id_str)
+                t_client.reply(msg2, tweet_id_str)
 # --- コマンド:存在しない
             else:
                 # 結果をリプライ

@@ -8,3 +8,4 @@ class Command(Enum):
     TIP = "!出荷"
     RAIN = "!水やり"
     DONATE = "!寄付"
+    HELP = "!ヘルプ"
