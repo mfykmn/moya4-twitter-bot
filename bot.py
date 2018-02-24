@@ -46,7 +46,7 @@ if __name__ == '__main__':
                 break
 
             print(tweet_dict[1])
-            # コマンド:@tip_moya4_bot !開園
+# --- コマンド:@tip_moya4_bot !開園
             if tweet_dict[1] == Command.REGSTER.value:
                 try:
                     user = d_client.getUser(sender_user_id_str)
@@ -65,9 +65,7 @@ if __name__ == '__main__':
                 except:
                     t_client.reply(
                         "@" + sender_user_screen_name + " エラー発生", tweet_id_str)
-
-
-            # コマンド:@tip_moya4_bot !もやたす
+# --- コマンド:@tip_moya4_bot !もやたす
             elif tweet_dict[1] == Command.BALANCE.value:
                 # 保持コインの確認
                 balance = w_client.getbalance(sender_user_id_str)
@@ -76,7 +74,7 @@ if __name__ == '__main__':
                 res = t_client.reply(
                     "@" + sender_user_screen_name + " TODO: !もやたす コマンドの結果" + balance, tweet_id_str)
                 print(res)
-            # コマンド:@tip_moya4_bot !種まき [数量]
+# --- コマンド:@tip_moya4_bot !種まき [数量]
             elif tweet_dict[1] == Command.DEPOSIT.value:
                 amount = tweet_dict[2]
 
@@ -87,7 +85,7 @@ if __name__ == '__main__':
                 res = t_client.reply(
                     "@" + sender_user_screen_name + " TODO: !種まき コマンドの結果", tweet_id_str)
                 print(res)
-            # コマンド:@tip_moya4_bot !収穫 [数量]
+# --- コマンド:@tip_moya4_bot !収穫 [数量]
             elif tweet_dict[1] == Command.WITHDRAW.value:
                 amount = tweet_dict[2]
 
@@ -98,7 +96,7 @@ if __name__ == '__main__':
                 res = t_client.reply(
                     "@" + sender_user_screen_name + " TODO: !収穫 コマンドの結果", tweet_id_str)
                 print(res)
-            # コマンド:@tip_moya4_bot !出荷 [メンション／アドレス] [数量]
+# --- コマンド:@tip_moya4_bot !出荷 [メンション／アドレス] [数量]
             elif tweet_dict[1] == Command.TIP.value:
                 receiver_users = get_receiver_users(tweet, tweet_dict[2][1:])
                 amount = tweet_dict[3]
@@ -110,7 +108,7 @@ if __name__ == '__main__':
                 res = t_client.reply(
                     "@" + sender_user_screen_name + " TODO: !出荷 コマンドの結果", tweet_id_str)
                 print(res)
-            # コマンド:@tip_moya4_bot !水やり [数量]
+# --- コマンド:@tip_moya4_bot !水やり [数量]
             elif tweet_dict[1] == Command.RAIN.value:
                 amount = tweet_dict[2]
 
@@ -121,6 +119,7 @@ if __name__ == '__main__':
                 res = t_client.reply(
                     "@" + sender_user_screen_name + " TODO: !水やり コマンドの結果", tweet_id_str)
                 print(res)
+# --- コマンド:存在しない
             else:
                 # 結果をリプライ
                 res = t_client.reply(
