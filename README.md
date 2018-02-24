@@ -6,8 +6,17 @@ Require Python 3.6.4
 pipenv run python bot.py
 ```
 
-
 # Walletについて
+## 設定ファイル
+```bash
+vi ~/.sprouts/sprouts.conf
+
+rpcuser=*****
+rpcpassword=*****
+rpcport=*****
+rpcallowip=***** # RPC接続を許可するIP
+```
+
 ## コマンド
 ```bash
 cd ~/sprouts/src
@@ -19,19 +28,13 @@ cd ~/sprouts/src
 ./sproutsd stop
 ```
 
-## 設定ファイル
-```bash
-vi ~/.sprouts/sprouts.conf
-
-rpcuser=*****
-rpcpassword=*****
-rpcport=*****
-```
-
 ## Curl例
 ```bash
-$ ~/sprouts/src$ curl -s -X POST --data '{"jsonrpc":"2.0","id":1,"method":"getbalance","params":[""]}' -H '{"content-type": "application/json"}' http://moya4:moya4pass@127.0.0.1:8332/
+$ ~/sprouts/src
+$ curl -s -X POST --data '{"jsonrpc":"2.0","id":1,"method":"getbalance","params":[""]}' -H '{"content-type": "application/json"}' http://moya4:moya4pass@127.0.0.1:8332/
 {"result":0.00000000,"error":null,"id":1}
 ```
+
 # 参考リンク
-* http://kozilla.hatenablog.com/entry/2018/01/24/173546
+* [SPRTS(Sprouts)コインのWalletをUbuntu 16.04でビルドする(daemon編)](http://kozilla.hatenablog.com/entry/2018/01/24/173546)
+* [Bitcoin WalletのWiki](https://en.bitcoin.it/wiki/Running_Bitcoin)
