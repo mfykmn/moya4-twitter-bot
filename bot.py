@@ -4,6 +4,7 @@ import toml
 # Internal package
 from twitter_client import TwitterClient
 from wallet_client import WalletClient
+from db_client import DBClient
 from commands import Command
 
 config_path = './_config/development.toml'
@@ -24,6 +25,7 @@ if __name__ == '__main__':
 
     t_client = TwitterClient(config["twitter"])
     w_client = WalletClient(config["wallet"])
+    d_client = DBClient(config["database"])
 
     print("Worker Run")
 
@@ -44,8 +46,11 @@ if __name__ == '__main__':
             print(tweet_dict[1])
             # コマンド:@tip_moya4_bot !開園
             if tweet_dict[1] == Command.REGSTER.value:
+                d_client.getUser(sender_user_id)
+                # TODO: DBチェック
+
                 # アドレス生成
-                w_client.getnewaddress(sender_user_id, sender_user_screen_name)
+                w_client.getnewaddress(sender_user_id)
 
                 # 結果をリプライ
                 res = t_client.reply(
@@ -54,11 +59,11 @@ if __name__ == '__main__':
             # コマンド:@tip_moya4_bot !もやたす
             elif tweet_dict[1] == Command.BALANCE.value:
                 # 保持コインの確認
-                w_client.balance(sender_user_id, sender_user_screen_name)
+                balance = w_client.getbalance(sender_user_id)
 
                 # 結果をリプライ
                 res = t_client.reply(
-                    "@" + sender_user_screen_name + " TODO: !もやたす コマンドの結果", tweet_id_str)
+                    "@" + sender_user_screen_name + " TODO: !もやたす コマンドの結果" + balance, tweet_id_str)
                 print(res)
             # コマンド:@tip_moya4_bot !種まき [数量]
             elif tweet_dict[1] == Command.DEPOSIT.value:
