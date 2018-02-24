@@ -1,15 +1,10 @@
 # twitter client
 Require Python 3.6.4
 
-```bash
-# Botの起動
-pipenv run python bot.py
-```
-
 # Walletについて
 ## 設定ファイル
 ```bash
-vi ~/.sprouts/sprouts.conf
+$ vi ~/.sprouts/sprouts.conf
 
 rpcuser=*****
 rpcpassword=*****
@@ -19,13 +14,13 @@ rpcallowip=***** # RPC接続を許可するIP
 
 ## コマンド
 ```bash
-cd ~/sprouts/src
+$ cd ~/sprouts/src
 
 # デーモンの起動
-./sproutsd -daemon
+$ ./sproutsd -daemon
 
 # デーモンの停止
-./sproutsd stop
+$ ./sproutsd stop
 ```
 
 ## Curl例
@@ -33,6 +28,24 @@ cd ~/sprouts/src
 $ ~/sprouts/src
 $ curl -s -X POST --data '{"jsonrpc":"2.0","id":1,"method":"getbalance","params":[""]}' -H '{"content-type": "application/json"}' http://moya4:moya4pass@127.0.0.1:8332/
 {"result":0.00000000,"error":null,"id":1}
+```
+
+# 開発について
+## Pipenv
+```bash
+# パッケージインストール
+$ pipenv install [パッケージ]
+```
+
+```bash
+# Botの起動
+$ pipenv run python bot.py
+```
+
+## Docker
+```bash
+# 起動
+$ docker-compose up -d
 ```
 
 # 参考リンク
