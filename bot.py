@@ -56,9 +56,15 @@ if __name__ == '__main__':
                         # DB登録
                         d_client.createUser(sender_user_id_str, addr)
 
+                        msg = "@{screen_name}さん もやしファームが開園されましたよ！\n" \
+                              + "🏦 アドレス：{address}\n"
+                        formatted_msg = msg.format(
+                            screen_name=sender_user_screen_name,
+                            address="TODO",
+                        )
+
                         # 結果をリプライ
-                        t_client.reply(
-                            "@" + sender_user_screen_name + " 開園しました！ アドレス: "+addr, tweet_id_str)
+                        t_client.reply(formatted_msg, tweet_id_str)
                     else:
                         t_client.reply(
                             "@" + sender_user_screen_name + " もう開園済みだよ", tweet_id_str)
