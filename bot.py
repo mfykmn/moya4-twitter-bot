@@ -83,13 +83,15 @@ if __name__ == '__main__':
                         msg = "@{screen_name}さんの育成状況だよ。栽培がんばろー！\n" \
                             + "🏦 アドレス：{address}\n" \
                             + "🛒 出荷待ち：{balance}もやし\n" \
-                            + "🌱 栽培中　： TODOもやし\n" \
-                            + "💧 総水やり量：TODO\n" \
+                            + "🌱 栽培中　： {cultivation_coins}もやし\n" \
+                            + "💧 総水やり量：{total_rain}\n" \
                             + "👑 水やりランク：TODO位"
                         formatted_msg = msg.format(
                             screen_name=sender_user_screen_name,
-                            address="TODO",
-                            balance=str(balance)
+                            address=user[1],
+                            balance=str(balance),
+                            cultivation_coins=str(user[2]),
+                            total_rain=str(user[3]),
                         )
 
                         # 結果をリプライ
