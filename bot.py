@@ -104,15 +104,47 @@ if __name__ == '__main__':
                         "@" + sender_user_screen_name + " エラー発生", tweet_id_str)
 # --- コマンド:@tip_moya4_bot !種まき [数量]
             elif tweet_dict[1] == Command.DEPOSIT.value:
-                amount = tweet_dict[2]
+                amount = float(tweet_dict[2])
+                fee = 0.01 # 手数料
 
-                # コインを残高に入金する
-                w_client.deposit(sender_user_id_str, sender_user_screen_name, amount)
+                try:
+                    user = d_client.getUser(sender_user_id_str)
+                    # ユーザー存在チェック
+                    if user is None:
+                        t_client.reply(
+                            "@" + sender_user_screen_name + " アドレスが存在しません。開園を行ってください", tweet_id_str)
+                        break
 
-                # 結果をリプライ
-                res = t_client.reply(
-                    "@" + sender_user_screen_name + " TODO: !種まき コマンドの結果", tweet_id_str)
-                print(res)
+                    # 保持コインの確認
+                    balance = w_client.getbalance(sender_user_id_str)
+                    if amount + fee < balance:
+                        t_client.reply(
+                            "@" + sender_user_screen_name + " 出荷待ちのもやしが不足しています。", tweet_id_str)
+                        break
+
+                    # 個人のwalletから共有walletにコインを移す
+                    w_client.deposit(sender_user_id_str, amount)
+                    # 移した分だけDBの栽培中のコインを増やす
+                    before_cultivation_coins = user[2]
+                    update_cultivation_coins = before_cultivation_coins + amount
+                    d_client.updateUserCultivationCoins(sender_user_id_str, update_cultivation_coins)
+
+                    msg = "@{screen_name} {amount}もやし種まきしました！\n" \
+                          + "🛒 出荷待ち：{balance}もやし\n" \
+                          + "🌱 栽培中　： {cultivation_coins}もやし\n"
+
+                    formatted_msg = msg.format(
+                        screen_name=sender_user_screen_name,
+                        amount=amount,
+                        balance=str(balance - amount),
+                        cultivation_coins=str(update_cultivation_coins),
+                    )
+
+                    # 結果をリプライ
+                    t_client.reply(formatted_msg, tweet_id_str)
+                except:
+                    t_client.reply("@" + sender_user_screen_name + " エラー発生", tweet_id_str)
+
 # --- コマンド:@tip_moya4_bot !収穫 [数量]
             elif tweet_dict[1] == Command.WITHDRAW.value:
                 amount = tweet_dict[2]

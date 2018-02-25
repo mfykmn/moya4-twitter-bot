@@ -53,7 +53,8 @@ class WalletClient:
 
         return response["result"]
 
-    def deposit(self, sender_user_id, sender_user_screen_name, amount):
+    def deposit(self, sender_user_id, amount):
+        #todo amauntをユーザーから管理者のwalletに移す
         print("deposit")
 
     def withdraw(self, sender_user_id, sender_user_screen_name, amount):
