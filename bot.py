@@ -60,7 +60,7 @@ if __name__ == '__main__':
                               + "🏦 アドレス：{address}\n"
                         formatted_msg = msg.format(
                             screen_name=sender_user_screen_name,
-                            address="TODO",
+                            address=addr,
                         )
 
                         # 結果をリプライ
