@@ -8,6 +8,7 @@ class DBClient:
         return psycopg2.connect(self.dsn)
 
     def getUser(self, user_id):
+        print("getUser")
         query = "select * from users where twitter_user_id=%s"
 
         with self.__get_connection() as conn:
@@ -16,6 +17,7 @@ class DBClient:
                 return cur.fetchone()
 
     def createUser(self, user_id, wallet_address):
+        print("createUser")
         query = "insert into users (twitter_user_id, wallet_address) values (%s, %s)"
 
         with self.__get_connection() as conn:
