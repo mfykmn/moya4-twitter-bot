@@ -1,4 +1,4 @@
-# twitter client
+# 🌱SPRTS tip Bot🚀
 Require Python 3.6.4
 
 # Walletについて
