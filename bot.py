@@ -8,14 +8,12 @@ from db_client import DBClient
 from commands import Command
 
 config_path = './_config/development.toml'
+fee = 0.01 # 手数料
 
-def get_receiver_users(tweet, receiver_screen_name):
+def get_receiver_user_id_str(tweet, receiver_screen_name):
     for mention in tweet["entities"]["user_mentions"]:
         if mention["screen_name"] == receiver_screen_name:
-            return {
-                "id": mention["id"],
-                "screen_name": mention["screen_name"]
-            }
+            return mention["id"]
 
     raise Exception("not match receiver_user")
 
@@ -105,7 +103,6 @@ if __name__ == '__main__':
 # --- コマンド:@tip_moya4_bot !種まき [数量]
             elif tweet_dict[1] == Command.DEPOSIT.value:
                 amount = float(tweet_dict[2])
-                fee = 0.01 # 手数料
 
                 try:
                     user = d_client.getUser(sender_user_id_str)
@@ -158,16 +155,60 @@ if __name__ == '__main__':
                 print(res)
 # --- コマンド:@tip_moya4_bot !出荷 [メンション／アドレス] [数量]
             elif tweet_dict[1] == Command.TIP.value:
-                receiver_users = get_receiver_users(tweet, tweet_dict[2][1:])
-                amount = tweet_dict[3]
+                amount = float(tweet_dict[3])
 
-                # コインをメンション or アドレスに送金する
-                w_client.tip(sender_user_id_str, sender_user_screen_name, receiver_users, amount)
+                try:
+                    # 送信先アドレスの取得
+                    to_address = ""
+                    if "@" == tweet_dict[2][:1]:
+                        # メンション指定だった場合
+                        receiver_users_id_str = get_receiver_user_id_str(tweet, tweet_dict[2][1:])
+                        user = d_client.getUser(receiver_users_id_str)
+                        # ユーザー存在チェック
+                        if user is None:
+                            t_client.reply(
+                                "@" + sender_user_screen_name + " 送信先メンションのアドレスが存在しません", tweet_id_str)
+                            break
 
-                # 結果をリプライ
-                res = t_client.reply(
-                    "@" + sender_user_screen_name + " TODO: !出荷 コマンドの結果", tweet_id_str)
-                print(res)
+                        to_address = user[1]
+                    else:
+                        # アドレス指定だった場合
+                        to_address = tweet_dict[2]
+
+
+                    user = d_client.getUser(sender_user_id_str)
+                    # ユーザー存在チェック
+                    if user is None:
+                        t_client.reply(
+                            "@" + sender_user_screen_name + " アドレスが存在しません。開園を行ってください", tweet_id_str)
+                        break
+
+                    # 保持コインの確認
+                    balance = w_client.getbalance(sender_user_id_str)
+                    if amount + fee < balance:
+                        t_client.reply(
+                            "@" + sender_user_screen_name + " 出荷待ちのもやしが不足しています。", tweet_id_str)
+                        break
+
+                    # コインをメンション or アドレスに送金する
+                    w_client.sendfrom(sender_user_id_str, to_address, amount)
+
+                    msg = "@{screen_name} {amount}もやし出荷しました！\n" \
+                          + "🛒 出荷待ち：{balance}もやし\n" \
+
+                    formatted_msg = msg.format(
+                        screen_name=sender_user_screen_name,
+                        amount=amount,
+                        balance=str(balance - amount),
+                    )
+
+                    # 結果をリプライ
+                    t_client.reply(formatted_msg, tweet_id_str)
+
+
+                except:
+                    t_client.reply("@" + sender_user_screen_name + " エラー発生", tweet_id_str)
+
 # --- コマンド:@tip_moya4_bot !水やり [数量]
             elif tweet_dict[1] == Command.RAIN.value:
                 amount = tweet_dict[2]
