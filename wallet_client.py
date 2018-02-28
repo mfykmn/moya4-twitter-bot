@@ -53,6 +53,21 @@ class WalletClient:
 
         return response["result"]
 
+    def sendfrom(self, user_id, to_address, amount):
+        print("sendfrom")
+        request = {
+            "jsonrpc": "2.0",
+            "method": "sendfrom",
+            "params": [user_id, to_address, amount],
+            "id": 1
+        }
+        response = requests.post(self.url, data=json.dumps(request), headers=self.headers).json()
+        print(response)
+        if response["error"]:
+            raise Exception(response["error"])
+
+        return response["result"]
+
     def deposit(self, sender_user_id, amount):
         #todo amauntをユーザーから管理者のwalletに移す
         print("deposit")
